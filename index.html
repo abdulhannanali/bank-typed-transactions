@@ -1,0 +1,261 @@
+<!--
+    Bank Transaction Demo!
+    This can be converted into a better looking demo and a primer 
+    into typed arrays. 
+
+    TODO: Convert this into a primer for TypedArrays
+-->
+<html>
+    <head>
+        <title>TypedArray Transactions</title>
+        <style type="text/css">
+            body {
+                margin: auto;
+                padding: 0;
+                max-width: 800px;
+                font-family: sans-serif;
+            }
+
+            .head {
+                background-color: lightgreen;
+                padding: 20px;
+            }
+
+            .head h1 {
+                text-align: center;
+            }
+
+            .data-body {
+                margin: 10px;
+            }
+
+            .data-table .label {
+                font-weight: bold;
+            }
+
+            .bank-transaction {
+                margin: 20px;
+            }
+
+            .field {
+                margin: 5px;
+            }
+
+            .field .label {
+                font-weight: bold;
+                font-size: 21px;
+            }
+
+            .field .input .label {
+                font-size: 16px;
+                font-weight: bold;
+            }
+
+            .field .input .value {
+                padding: 5px;
+                width: 100%;
+                font-size: 18px;
+                font-family: monospace;
+                display: block;
+            }
+
+            .submission-field button {
+                padding: 10px;
+            }
+
+            .transaction-response {
+                margin: 20px;
+            }
+
+            .transaction-response code {
+                display: block;
+                background-color: #e9e9e9;
+                padding: 10px;
+            }
+
+            .field {
+                padding: 10px;
+                margin-top: 10px;
+                margin-bottom: 10px;
+                border-top: 1px #e9e9e9 solid;
+                border-bottom: 1px #e9e9e9 solid;
+            }
+
+            .field .label {
+                margin-bottom: 10px;
+            }
+
+            .status {
+                margin: 10px;
+            }
+
+            .status.warning {
+                color: orange;
+            }
+
+            .status.success {
+                color: green;
+            }
+
+            .fixed-value {
+                color: lightcoral;
+                font-size: 21px;
+            }
+
+            .note.warning {
+                color: orange;
+                font-weight: bold;
+                font-size: 18px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="head">
+                <h1>Binary Data Transfer in JavaScript</h1>
+                <p>
+                    Data Transfer in Binary Protocol for faster and efficient performance. This is a demo that demonstrates the concept of structuring data in Binary using <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypedArray">Typed Array</a>. Especially, for creating C like Struct Data using fixed memory chunks native to the computer
+                    system just like in C, increasing the performance of the communication being done by manifolds.
+                </p>
+                <h3>About this demo!</h3>
+                <p>
+                    The demo is inspired from the <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Typed_arrays#Working_with_complex_data_structures">Working with Complex Data Structures</a> in MDN where there's a C like structure representation. We intend to send this data not in widely used formats in JavaScript such as JSON but in binary format since XHR and fetch supports sending array buffer to the application. A helper library axios is used to make this process of sending the data simpler for us.
+                    <br><br>
+                    Information about the data, total bytes and other related information regarding the data 
+                    can be found below. The below section provides information about order bytes are sent in, number of bytes
+                    and the data structures use for different fields.
+                    <br>
+                    The data we intend to learn about this application is an Array Buffer with information about the transaction
+                    being done in the application.
+                </p>
+                <h3>Examining the Array Buffer</h3>
+                <p>
+                    There's a sample backend in progress within this repo, which can be used to parse the binary buffer
+                    request and provide back a JSON response, but till then you can click on <code>Enter Transaction</code> button and examine the 
+                    array buffer through `window.currentTransaction` variable in the log.  
+                </p>
+                <h4>Examining the index.js file</h4>
+                <p>
+                    To learn more about how the data is stored in the buffer checkout the <a href="./index.js">index.js</a>
+                    file, which contains information about how it's done and stored into an array buffer using awesome Typed Array Views.
+                </p>
+            </div>
+            <div class="bank-transaction">
+                <div class="sub-head">
+                    <h3>Enter the Bank Transaction</h3>
+                    <p class="note warning">
+                        Warning: Out of range values will be sliced.
+                    </p>
+                    <p>
+                        Formatted bank transaction, containing fields such as <b>username</b>, <b>transaction_type</b> and more that are discussed below. If you haven't read about different data structures TypedArray supports, check out the TypedArray guide on MDN. Elements here follow a C like Struct. Constant values are represented by blue color within the web page.
+                    </p>
+                </div>
+                <div class="form">
+                    <div class="field">
+                        <div class="label">Header (Uint8Array)</div>
+                        <p class="desc">
+                            Constant value to determine the start of the buffer. If this buffer is not present, the request SHOULD BE rejected
+                            by the server side as invalid buffer.
+                        </p>
+                        <p>
+                            Bytes Per Element: <b>1</b><br>
+                            Number of Bytes: <b>12</b>
+                        </p>
+                        <p>
+                            constant and Uint8Array encoded equivalent of 
+                            utf8-string <span class="fixed-value">BANKBINARYDT</span>
+                        </p>
+                    </div>
+                    <div class="field">
+                        <div class="label">Username (Uint8Array)</div>
+                        <p class="desc">
+                            A 16 byte Uint8Array for the bank account username,
+                            since it's a Uint8Array the Uint8Array elememnt 
+                            should be equivalent to the UTF-8 String code point.
+                            <br>
+                            If the source is greater than 16 byte extra text is silently
+                            sliced.
+                        </p>
+                        <p>
+                            Number of Bytes: <b>16</b><br>
+                            Bytes Per Element: <b>1</b>
+                        </p>
+                        <div class="input">
+                            <div class="label">Enter the value of the username</div>
+                            <input type="text" id="username_input" class="value" placeholder="computistic">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="label">Bank Code (Uint8Array)</div>
+                        <p>
+                            Number of Bytes: <b>4</b><br>
+                            Bytes Per Element: <b>1</b>
+                        </p>
+                        <p class="desc">
+                            Bank Code of 4 Bytes converted to Uint8Array having 
+                            UTF-8 equivalent code points.
+                        </p>
+                        <div class="input">
+                            <div class="label">Bank Code (Max: 4 Characters)</div>
+                            <input type="text" id="code_input" class="value" placeholder="ABL">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="label">Transaction Type (Int8Array)</div>
+                        <p>
+                            Number of Bytes: <b>4</b><br>
+                            Bytes Per Element: <b>1</b>
+                        </p>
+                        <p class="desc">
+                            Type of the transaction being sent to the server side,
+                            right now two values are supported
+                            <ul>
+                                <li><b>WD</b> (Stands for Money Withdrawl)</li>
+                                <li><b>DP</b> (Stands for Money Deposit)</li>
+                            </ul>
+
+                            These transaction value consist of two bytes (one per character) but the total length supported by the transaction types is 4 and these bytes can be used in the future for more type of transactions. 
+                        </p>
+                        <div class="input">
+                            <div class="label">Transaction Type (Max 4 characters):</div>
+                            <input type="text" id="type_input" class="value" placeholder="WD">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="label">
+                            Amount (Float64Array)                
+                        </div>
+                        <p>
+                            Bytes Per Element: <b>4</b><br>
+                            Total Elements: <b>3</b><br>
+                            Total Number of Bytes: <b>4 x 3 = 12</b>
+                        </p>
+                        <p class="desc">
+                            Amount contains the amount involved in the transaction. It supports a 64 bit Float, and hence can support very large value. So be generous with the transactions.
+                            <br>
+                            Amount consists of 3 Elements in a Float64Array and the other elements can be used in the future for tax deductions and other things. Right now, the first element is only going to be read by the backend
+                        </p>
+                        <div class="input">
+                            <div class="label">Amount in Float 64</div>
+                            <input id="amount_input" type="number" class="value">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <span class="label">Termination Padding</span>
+                        <span type="text" class="value">BEND</span>
+                    </div>
+                    <div class="submission-field">
+                        <button id="submit">Enter Transaction</button>
+                    </div>
+                </div>
+                <div class="status"></div>
+            </div>
+        </div>
+
+        <!--Using Axios Library to send and Receive Binary Buffers-->
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+        
+        <!-- index.js contains the serialization format -->
+        <script src="./index.js" type="text/javascript"></script>
+    </body>
+</html>
